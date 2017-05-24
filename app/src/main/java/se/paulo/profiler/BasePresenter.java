@@ -4,6 +4,7 @@ package se.paulo.profiler;
  */
 
 public interface BasePresenter {
+
     void subscribe();
     void unsubscribe();
 }
