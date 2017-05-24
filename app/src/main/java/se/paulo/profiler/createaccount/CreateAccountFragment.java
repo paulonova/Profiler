@@ -36,17 +36,16 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
     private CreateAccountContract.Presenter presenter;
 
     @Override
-    public void setPresenter (CreateAccountContract.Presenter presenter){
+    public void setPresenter(CreateAccountContract.Presenter presenter) {
         this.presenter = presenter;
     }
-
 
 
     public CreateAccountFragment() {
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (presenter == null) {
             presenter = new CreateAccountPresenter(
@@ -59,7 +58,7 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
         presenter.subscribe();
     }
 
-    public static CreateAccountFragment newInstance(){
+    public static CreateAccountFragment newInstance() {
         return new CreateAccountFragment();
     }
 
@@ -94,7 +93,8 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
         setUpListeners();
         emailInput.requestFocus();
 
-        return v;}
+        return v;
+    }
 
     @Override
     public void makeToast(@StringRes int stringId) {
@@ -141,7 +141,7 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
 
     @Override
     public void showProgressIndicator(boolean show) {
-        if (show){
+        if (show) {
             progressBar.setVisibility(View.VISIBLE);
             contentContainer.setVisibility(View.INVISIBLE);
         } else {
@@ -151,7 +151,7 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         presenter.unsubscribe();
         super.onDestroy();
     }
@@ -160,12 +160,12 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
     /**
      * Sets Listeners to manage highlight colors for Inputs/Labels, based on hasFocus
      */
-    public void setUpListeners () {
+    public void setUpListeners() {
 
         nameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View label, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     nameLabel.setTextColor(
                             ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent)
                     );
@@ -182,7 +182,7 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
         emailInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View label, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     emailLabel.setTextColor(
                             ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent)
                     );
@@ -199,7 +199,7 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
         passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View label, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     passwordLabel.setTextColor(
                             ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent)
                     );
@@ -216,7 +216,7 @@ public class CreateAccountFragment extends Fragment implements CreateAccountCont
         confirmInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View label, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     confirmLabel.setTextColor(
                             ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent)
                     );

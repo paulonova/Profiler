@@ -10,8 +10,7 @@ public class FakeAuthService implements AuthSource {
 
     boolean returnFailure = false;
 
-    private static final User fakeUser =
-            new User(
+    private static final User fakeUser =  new User(
                     "email@example.com",
                     "someId"
             );

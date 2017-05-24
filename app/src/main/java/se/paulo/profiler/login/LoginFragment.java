@@ -4,7 +4,6 @@ package se.paulo.profiler.login;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -18,6 +17,8 @@ import android.widget.Toast;
 
 import se.paulo.profiler.R;
 import se.paulo.profiler.createaccount.CreateAccountActivity;
+import se.paulo.profiler.data.auth.AuthInjection;
+import se.paulo.profiler.data.scheduler.SchedulerInjection;
 import se.paulo.profiler.profilepage.ProfilePageActivity;
 
 /**
@@ -25,10 +26,9 @@ import se.paulo.profiler.profilepage.ProfilePageActivity;
  * This is a View (in MVP). It manages drawing/inflating the user interface, and
  * it tells the Presenter when a UI Input event has occured.
  *
- * It tries not to make any decisions itself.
+ * Really dumb. It tries not to make any decisions itself.
  */
 public class LoginFragment extends Fragment implements LoginContract.View {
-
     private Button login, register;
     private TextView emailLabel, passwordLabel;
     private EditText emailInput, passwordInput;
@@ -42,9 +42,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         this.presenter = presenter;
     }
 
-
     public LoginFragment() {
-        // Required empty public constructor
     }
 
     public static LoginFragment newInstance() {
@@ -52,27 +50,28 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /**This is important: It helps our View/Presenter/Service survive orientation*/
         this.setRetainInstance(true);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         if (presenter == null) {
-//            presenter = new LoginPresenter(
-//                    AuthInjection.provideAuthSource(),
-//                    this,
-//                    SchedulerInjection.provideSchedulerProvider());
-//
-//            presenter.subscribe();
+            presenter = new LoginPresenter(
+                    AuthInjection.provideAuthSource(),
+                    this,
+                    SchedulerInjection.provideSchedulerProvider());
+
+            presenter.subscribe();
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_login, container, false);
 
 
@@ -104,55 +103,30 @@ public class LoginFragment extends Fragment implements LoginContract.View {
 
         setUpListeners();
         emailInput.requestFocus();
+
+
         return v;
     }
 
-    /**
-     * Sets Listeners to manage highlight colors for Inputs/Labels, based on hasFocus
-     */
-    public void setUpListeners() {
-
-        emailInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View label, boolean hasFocus) {
-                if (hasFocus) {
-                    emailLabel.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent));
-                } else {
-                    emailLabel.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), android.R.color.white));
-                }
-            }
-        });
-
-        passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View label, boolean hasFocus) {
-                if (hasFocus) {
-                    passwordLabel.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent));
-                } else {
-                    passwordLabel.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), android.R.color.white));
-                }
-            }
-        });
-    }
-
     @Override
-    public void onDestroy(){
-        presenter.unsubscribe();
-        super.onDestroy();
+    public void showProgressIndicator(boolean show) {
+        if (show){
+            progressBar.setVisibility(View.VISIBLE);
+            contentContainer.setVisibility(View.INVISIBLE);
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+            contentContainer.setVisibility(View.VISIBLE);
+        }
     }
-
-
 
     @Override
     public void makeToast(@StringRes int stringId) {
         Toast.makeText(getActivity().getApplicationContext(), getString(stringId), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void makeToast(String message) {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -179,16 +153,45 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         startActivity(i);
     }
 
+    /**
+     * Sets Listeners to manage highlight colors for Inputs/Labels, based on hasFocus
+     */
+    public void setUpListeners() {
+        emailInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View label, boolean hasFocus) {
+                if (hasFocus) {
+                    emailLabel.setTextColor(
+                            ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent)
+                    );
+                } else {
+                    emailLabel.setTextColor(
+                            ContextCompat.getColor(getActivity().getApplicationContext(), android.R.color.white)
+                    );
+                }
+            }
+        });
+
+        passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View label, boolean hasFocus) {
+                if (hasFocus) {
+                    passwordLabel.setTextColor(
+                            ContextCompat.getColor(getActivity().getApplicationContext(), R.color.colorAccent)
+                    );
+                } else {
+                    passwordLabel.setTextColor(
+                            ContextCompat.getColor(getActivity().getApplicationContext(), android.R.color.white)
+                    );
+                }
+            }
+        });
+    }
 
     @Override
-    public void showProgressIndicator(boolean show) {
-        if (show){
-            progressBar.setVisibility(View.VISIBLE);
-            contentContainer.setVisibility(View.INVISIBLE);
-        } else {
-            progressBar.setVisibility(View.INVISIBLE);
-            contentContainer.setVisibility(View.VISIBLE);
-        }
-
+    public void onDestroy(){
+        presenter.unsubscribe();
+        super.onDestroy();
     }
+
 }

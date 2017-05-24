@@ -29,8 +29,6 @@ public class LoginPresenter implements LoginContract.Presenter {
         view.setPresenter(this);
     }
 
-//    public LoginPresenter() {
-//    }
 
 
     @Override
@@ -116,18 +114,17 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void onCreateClick() {
-
+        view.startCreateAccountActivity();
     }
-
 
     @Override
     public void subscribe() {
-
+        getUser();
     }
 
     @Override
     public void unsubscribe() {
-
+        compositeDisposable.clear();
     }
 
 

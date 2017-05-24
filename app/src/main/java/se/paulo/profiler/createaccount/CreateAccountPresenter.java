@@ -22,11 +22,7 @@ public class CreateAccountPresenter implements CreateAccountContract.Presenter {
     private BaseSchedulerProvider schedulerProvider;
     private DatabaseSource database;
 
-    public CreateAccountPresenter(AuthSource auth,
-                                  DatabaseSource database,
-                                  CreateAccountContract.View view,
-                                  BaseSchedulerProvider schedulerProvider
-    ) {
+    public CreateAccountPresenter(AuthSource auth, DatabaseSource database, CreateAccountContract.View view, BaseSchedulerProvider schedulerProvider) {
         this.auth = auth;
         this.database = database;
         this.view = view;
@@ -54,8 +50,7 @@ public class CreateAccountPresenter implements CreateAccountContract.Presenter {
 
     private void attemptAccountCreation(Credentials cred) {
         view.showProgressIndicator(true);
-        disposableSubscriptions.add(
-                auth.createAccount(cred)
+        disposableSubscriptions.add(auth.createAccount(cred)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribeWith(
@@ -102,13 +97,8 @@ public class CreateAccountPresenter implements CreateAccountContract.Presenter {
     }
 
     private void addUserProfileToDatabase(String email, String uid) {
-        final Profile profile = new Profile(
-                "",
-                "",
-                uid,
-                email,
-                "",
-                view.getName());
+        final Profile profile = new Profile("", "", uid, email, "", view.getName());
+
         disposableSubscriptions.add(database.createProfile(profile)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
